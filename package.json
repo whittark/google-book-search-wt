@@ -1,0 +1,22 @@
+{
+  "name": "google-book-search-wt",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/whittark/google-book-search-wt.git"
+  },
+  "author": "Whitney Tarkington",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/whittark/google-book-search-wt/issues"
+  },
+  "homepage": "https://github.com/whittark/google-book-search-wt#readme",
+  "dependencies": {
+    "react": "^16.12.0"
+  }
+}
