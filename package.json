@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/whittark/google-book-search-wt#readme",
   "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.8.1",
     "react": "^16.12.0"
   }
 }
