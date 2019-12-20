@@ -8,7 +8,8 @@ const PORT = process.env.PORT || 3001;
 // Configure body parsing for AJAX requests
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// Serve up static assets
+
+// For my production build
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
@@ -18,7 +19,7 @@ app.use(routes);
 
 // Connect to the Mongo DB
 mongoose.connect(
-  process.env.MONGODB_URI || "mongodb://localhost/googleBnooks",
+  process.env.MONGODB_URI || "mongodb://whittark:Allegro11!@ds119078.mlab.com:19078/heroku_zrmjm1wp",
   {
     useCreateIndex: true,
     useNewUrlParser: true
