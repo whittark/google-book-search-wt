@@ -27,5 +27,16 @@
     "react": "^16.12.0",
     "react-bootstrap": "^1.0.0-beta.16",
     "react-dom": "^16.12.0"
-  }
+  },
+  "engines": {
+    "node": "^10.16.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/whittark/google-book-search-wt.git"
+  },
+  "bugs": {
+    "url": "https://github.com/whittark/google-book-search-wt/issues"
+  },
+  "homepage": "https://github.com/whittark/google-book-search-wt#readme"
 }
