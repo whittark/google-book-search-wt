@@ -1,116 +1,118 @@
 import React, { Component } from "react";
+import Jumbotron from "../components/Jumbotron";
+import Card from "../components/Card";
+import Form from "../components/Form";
+import Book from "../components/Book";
+import Footer from "../components/Footer";
 import API from "../utils/API";
-import "./pages.css";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import Wrapper from "../components/Layout/wrapper";
-import Container from "../components/Layout/container";
-import BookCard from "../components/Card/BookCard";
-import SearchForm from "../components/Search/SearchForm";
-import SearchResults from "../components/SearchResults";
+import { Col, Row, Container } from "../components/Grid";
+import { List } from "../components/List";
+import "./index.css";
 
-// setting components initial state
 class Home extends Component {
- constructor(props){
-   super(props);
-   this.state ={
-     books: []
-   }
- }
-  componentDidMount() {
+  state = {
+    books: [],
+    q: "",
+    message: "Search for a title to view publications"
+  };
 
-  }
-  // Get  value and name of input which triggered change
   handleInputChange = event => {
     const { name, value } = event.target;
     this.setState({
       [name]: value
     });
   };
-  // Handle event when form is submitted
-  handleFormSubmit = event => {
-    event.preventDefault();
 
-    API.searchBooks(this.state.search)
-      .then(res => {
-        let books = res.data.items;
-        console.log(books);
-
-        //loop through array of book objects
-        books.forEach(book => {
-          let title = book.volumeInfo.title;
-          let authors = book.volumeInfo.authors;
-          let description = book.volumeInfo.description;
-          let image = book.volumeInfo.imageLinks.thumbnail;
-          let link = book.selfLink;
-
-          this.setState({
-            books: books,
-            title: title,
-            authors: authors,
-            description: description,
-            image: image,
-            link: link
-          });
-        });
-      })
-      .catch(err => console.log(err));
-
+  getBooks = () => {
+    API.getBooks(this.state.q)
+      .then(res =>
+        this.setState({
+          books: res.data
+        })
+      )
+      .catch(() =>
+        this.setState({
+          books: [],
+          message: "No New Books Found, Try a Different Query"
+        })
+      );
   };
 
-  // Save book
-  handleOnClick = event => {
+  handleFormSubmit = event => {
     event.preventDefault();
+    this.getBooks();
+  };
+
+  handleBookSave = id => {
+    const book = this.state.books.find(book => book.id === id);
+
     API.saveBook({
-      title: this.state.title,
-      authors: this.state.authors,
-      description: this.state.description,
-      image: this.state.image,
-      link: this.state.link
-    })
-      .then(res => alert("Book has been added to your bookshelf!"))
-      .catch(err => console.log(err));
+      googleId: book.id,
+      title: book.volumeInfo.title,
+      subtitle: book.volumeInfo.subtitle,
+      link: book.volumeInfo.infoLink,
+      authors: book.volumeInfo.authors,
+      description: book.volumeInfo.description,
+      image: book.volumeInfo.imageLinks.thumbnail
+    }).then(() => this.getBooks());
   };
 
   render() {
     return (
-      <div>
-
-        <Wrapper>
-          <h1>Search For A New Book!</h1>
-          <Container>
-            <SearchForm
-              handleFormSubmit={this.handleFormSubmit}
-              handleInputChange={this.handleInputChange}
-              title={this.state.title}
-            />
-          </Container>
-          <SearchResults books={this.state.books} />
-
-          {/* <Container>
-            <Paper id="searchResults" className={this.root} elevation={1}>
-              <Typography variant="h5" component="h3">
-                Results:
-              </Typography> */}
-
-            <Container>
-                <BookCard
-                  id={this.state.books.id}
-                  key={this.state.books.id}
-                  title={this.state.title}
-                  authors={this.state.authors}
-                  description={this.state.description}
-                  image={this.state.image}
-                  link={this.state.link}
-                />
-              </Container> 
-
-            
-        </Wrapper>
-
-      </div>
+      <Jumbotron>
+        <h1 className="text-center">
+          <strong>Google Library Builder</strong>
+          </h1>
+          <h4 className="text-center">Search and save your favorite reads</h4>
+        
+      <Container>
+        <Row>
+          <Col size="md-12">
+            <Card title="Book Search" icon="far fa-book">
+              <Form
+                handleInputChange={this.handleInputChange}
+                handleFormSubmit={this.handleFormSubmit}
+                q={this.state.q}
+              />
+            </Card>
+          </Col>
+        </Row>
+        <Row>
+          <Col size="md-12">
+            <Card title="Results" icon="far fa-bookmark">
+              {this.state.books.length ? (
+                <List>
+                  {this.state.books.map(book => (
+                    <Book
+                      key={book.id}
+                      title={book.volumeInfo.title}
+                      subtitle={book.volumeInfo.subtitle}
+                      link={book.volumeInfo.infoLink}
+                      authors={book.volumeInfo.authors.join(", ")}
+                      description={book.volumeInfo.description}
+                      image={book.volumeInfo.imageLinks.thumbnail}
+                      Button={() => (
+                        <button
+                          onClick={() => this.handleBookSave(book.id)}
+                          className="btn btn-primary ml-2"
+                        >
+                          Save
+                        </button>
+                      )}
+                    />
+                  ))}
+                </List>
+              ) : (
+                <h2 className="text-center">{this.state.message}</h2>
+              )}
+            </Card>
+          </Col>
+        </Row>
+        <Footer />
+      </Container>
+      </Jumbotron>
     );
   }
 }
+
 export default Home;

@@ -1,25 +1,31 @@
 {
-  "name": "google-book-search-wt",
+  "name": "google-library-building",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
+    "start:prod": "node server.js",
+    "start:dev": "concurrently \"nodemon --ignore 'client/*'\" \"npm run client\"",
+    "client": "cd client && npm run start",
+    "install": "cd client && npm install",
+    "build": "cd client && npm run build",
+    "heroku-postbuild": "npm run build"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/whittark/google-book-search-wt.git"
-  },
-  "author": "Whitney Tarkington",
+  "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/whittark/google-book-search-wt/issues"
+  "devDependencies": {
+    "concurrently": "^4.1.0",
+    "nodemon": "^1.18.7"
   },
-  "homepage": "https://github.com/whittark/google-book-search-wt#readme",
   "dependencies": {
-    "express": "^4.17.1",
-    "mongoose": "^5.8.1",
-    "path": "^0.12.7",
-    "react": "^16.12.0"
+    "axios": "^0.18.0",
+    "bootstrap": "^4.4.1",
+    "express": "^4.16.3",
+    "if-env": "^1.0.4",
+    "mongoose": "^5.3.16",
+    "react": "^16.12.0",
+    "react-bootstrap": "^1.0.0-beta.16",
+    "react-dom": "^16.12.0"
   }
 }
